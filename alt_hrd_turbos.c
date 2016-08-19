@@ -326,7 +326,9 @@ void alt_hrd_turbo_dma_s(char* decoded_data,  //decoder output
 {
 
         int cy,times=NUM_LOOP_TEST ;
+				printf("\nTrace[ ](2): Entering in acc_dma_h \n");
         acc_dma_h(times);
+				printf("\nTrace[ ](2): Leaving in acc_dma_h \n");
         for(cy=0;cy<times;cy++)
         {
                 if((times-1)==cy) flint=1;
@@ -336,9 +338,9 @@ void alt_hrd_turbo_dma_s(char* decoded_data,  //decoder output
 
 
         }
-	printf("\n Entering in acc_dma_do \n");
+				printf("\nTrace[ ](2): Entering in acc_dma_do \n");
         acc_dma_do(output_file);
-	printf("\n Leave acc_dma_do \n");
+				printf("\nTrace[ ](2): Leaving acc_dma_do \n");
 
 
 }
@@ -452,8 +454,8 @@ void*   alt_buf_write(void* q)
 
 
 	 
- //   for(ct=0;ct<1000000;ct++)
-        while(1)
+    for(ct=0;ct<6;ct++)
+        //while(1)
    	{	
 		for(k=0;k<cfile;k++)
 		//k=5;
@@ -474,6 +476,8 @@ void*   alt_buf_write(void* q)
 	   if (decoded_data != NULL)
 		   free(decoded_data);
    */
+
+			printf("\nTrace[ ](0) Leaving alt_buf_write\n");
        return  0;
 
 }
@@ -501,7 +505,7 @@ void*  alt_buf_read(void* q)
 		printf("Error in writing hdecoded_output!");
 
 	
-	while(1){
+	while(0){
 		
     	r=alt_rb_read(alt_rd_rb0, &tst_ele);    
     
@@ -566,6 +570,7 @@ void*  alt_buf_read(void* q)
 		}
 
 	  fclose(t_output_file);
+			printf("\nTrace[ ](0) Leaving alt_buf_read\n");
 	  return 0;
 
 
@@ -762,8 +767,13 @@ void*  alt_hturbo_deam(void *p)
                 //	    clock_gettime(CLOCK_MONOTONIC, &start);
                 blksiz=pele->block_size;
 		reset_meas(&time_1628t);        
-        start_meas(&time_1628t);        	
+        start_meas(&time_1628t);  
+
+        				printf("\nTrace[ ](1): Entering alt_hrd_turbo_dma_s\n");  
+
                 alt_hrd_turbo_dma_s(pele->decoded_data,pele->decoder_input,pele->block_size,/*decoder_type, num_engines,*/ pele->max_num_iter, /*bit_width, en_et,*/ pele->crc_type,/* crc_reflect_out,*/fint,(FILE *)output_file);
+
+        				printf("\nTrace[ ](1): Leaving alt_hrd_turbo_dma_s\n");      	
 
      //           stop_meas(&time_1628t);
 
@@ -782,15 +792,15 @@ void*  alt_hturbo_deam(void *p)
 
                 */
                 alt_rb_write(alt_rd_rb0,pele,0);
-		printf("\n After alt_rb_write\n");
+						//printf("\nTrace[ ](1): Leaving alt_rb_write\n");
 
 	        //}
 	
-         //       sched_yield();
+                sched_yield();
 
 	}
 	fclose(output_file);
-	printf("\n Leaving alt_hturbo_deam \n");
+	printf("\nTrace[ ](0): Leaving alt_hturbo_deam \n");
 	return 0;
 }
 
