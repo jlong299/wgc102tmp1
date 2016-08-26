@@ -505,13 +505,15 @@ void*  alt_buf_read(void* q)
 		printf("Error in writing hdecoded_output!");
 
 	
-	while(0){
+	int num_rb_read = 0;
+	while(num_rb_read < 6){
 		
     	r=alt_rb_read(alt_rd_rb0, &tst_ele);    
     
-#if 0
+#if 1
       if(READ_FINISH==r){
 
+      		num_rb_read++;
 			
 			block_size=tst_ele.block_size;
 			
@@ -570,6 +572,7 @@ void*  alt_buf_read(void* q)
 		}
 
 	  fclose(t_output_file);
+	  fclose(output_file);
 			printf("\nTrace[ ](0) Leaving alt_buf_read\n");
 	  return 0;
 
